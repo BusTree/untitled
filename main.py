@@ -9,9 +9,9 @@ import numpy as np
 driver = webdriver.Chrome('C:\chromedriver/chromedriver')
 driver.implicitly_wait(3)
 driver.get('https://www.op.gg/summoner/champions/userName=KOR%20Cow')
-season_xpath = ['9','8','7','6','5','4','3','2','1'] # 10노말 9 = 시즌1~   1 = 시즌9
-season_page = ['season-1','season-2','season-3','season-4','season-5','season-6','season-7','season-11','season-13'] # 시즌 api
-season_str = ['1','2','3','4','5','6','7','8','9']
+season_xpath = ['8','7','6','5','4','3','2','1'] # 10노말 9 = 시즌1~   1 = 시즌9
+season_page = ['season-2','season-3','season-4','season-5','season-6','season-7','season-11','season-13'] # 시즌 api
+season_str = ['2','3','4','5','6','7','8','9']
 
 season = []
 game_win = []
@@ -29,6 +29,7 @@ num = 0
 final =0
 final_kda =0
 
+
 season_win =[]
 season_lose = []
 season_value =[]
@@ -38,6 +39,7 @@ season_Assist =[]
 season_cs = []
 season_kda =[]
 season_sorted =[]
+season_rate = []
 
 # 전적조회
 for path in season_xpath:
@@ -116,7 +118,15 @@ for idx, value in enumerate(season_kill):
     if season_Death[idx] != 0:
         num = (season_kill[idx] + season_Assist[idx]) / season_Death[idx]
         season_kda.append(num)
-    else : season_kda.append(0)
+    else :
+        season_kda.append(0)
+
+    if season_value[idx] != 0 :
+        season_rate.append(season_win[idx] / season_value[idx] * 100)
+        season_rate.append(0)
+
+
+
 #    print(str(season_str[idx]) +" : "+str(season_kda[idx]))
 
 
@@ -125,10 +135,14 @@ for idx, value in enumerate(season_str):
    # print(str(season_str[idx]) + " : " + str(season_value[idx]) + '판')
 
     # print(str(season_str[idx]) +" : "+str(season_kda[idx]))
+
+
+
     final += season_value[idx]
     final_kda += (round(season_kda[idx],1))/8
-    print(str(season_str[idx])+' : kda = '+str(round(season_kda[idx],1)))
-    print('전체시즌 평균 kda :   '+str(final_kda))
+ #   print(str(season_str[idx])+' : kda = '+str(round(season_kda[idx],1)))
+    print(season_rate[idx])
+
 
 
 
@@ -143,6 +157,7 @@ for idx, value in enumerate(season_str):
 
 
 print("전체 게임수 : "+str(final))
+print('전체시즌 평균 kda :   '+str(final_kda))
 plt.bar(season_str,season_value, color="#47C83E", bottom=0, width=0.5)
 plt.bar(season_str,season_lose, color="#F15F5F", bottom=0, width=0.5)
 plt.bar(season_str,season_win, color="#6799FF", bottom=season_lose, width=0.5)
